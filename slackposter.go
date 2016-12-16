@@ -1,4 +1,4 @@
-package slapoi
+package slackposter
 
 import (
 	"bytes"
