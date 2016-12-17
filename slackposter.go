@@ -7,14 +7,13 @@ import (
 )
 
 type Slack struct {
-	Channel   string
-	Username  string
-	IconEmoji string
-	EndPoint  string
+	Channel    string
+	Username   string
+	IconEmoji  string
+	WebhookUrl string
 }
 
-// Refet to
-
+// Refer to:
 // Attaching content and links to messages | Slack
 // https://api.slack.com/docs/message-attachments
 
@@ -41,18 +40,18 @@ type Attachment struct {
 }
 
 type Config struct {
-	Channel   string `json:"channel"`
-	Username  string `json:"username"`
-	IconEmoji string `json:"icon_emoji"`
-	EndPoint  string `json:"end_point"`
+	Channel    string `json:"channel"`
+	Username   string `json:"username"`
+	IconEmoji  string `json:"icon_emoji"`
+	WebhookUrl string `json:"webhook_url"`
 }
 
 func NewSlack(config Config) Slack {
 	slack := Slack{
-		Channel:   config.Channel,
-		Username:  config.Username,
-		IconEmoji: config.IconEmoji,
-		EndPoint:  config.EndPoint,
+		Channel:    config.Channel,
+		Username:   config.Username,
+		IconEmoji:  config.IconEmoji,
+		WebhookUrl: config.WebhookUrl,
 	}
 	return slack
 }
@@ -86,7 +85,7 @@ func (slack Slack) post(payload Payload) error {
 
 	// Create request
 	body := bytes.NewBuffer(data)
-	request, err := http.NewRequest("POST", slack.EndPoint, body)
+	request, err := http.NewRequest("POST", slack.WebhookUrl, body)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	if err != nil {
 		return err
