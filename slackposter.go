@@ -9,6 +9,7 @@ import (
 type Slack struct {
 	Channel    string
 	Username   string
+	DryRun     bool
 	IconEmoji  string
 	WebhookUrl string
 }
@@ -83,6 +84,11 @@ func (slack Slack) post(payload Payload) error {
 	data, err := json.Marshal(payload)
 	if err != nil {
 		return err
+	}
+
+	if slack.DryRun {
+		fmt.Fprintln(os.Stdout, "**dry run**\njson:\n", string(data))
+		return nil
 	}
 
 	// Create request

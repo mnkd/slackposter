@@ -75,6 +75,16 @@ func TestPostMessage(t *testing.T) {
 	}
 }
 
+func TestPostMessageDryRun(t *testing.T) {
+	message := "Hello world. (dry run)"
+	slk := NewSlack(t)
+	slk.DryRun = true
+	err := slk.PostMessage(message)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestPostPayload(t *testing.T) {
 	slk := NewSlack(t)
 
