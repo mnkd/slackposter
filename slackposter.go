@@ -3,7 +3,9 @@ package slackposter
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"os"
 )
 
 type Slack struct {
@@ -35,11 +37,15 @@ type Field struct {
 }
 
 type Attachment struct {
-	Fallback string  `json:"fallback"`
-	Text     string  `json:"text"`
-	Color    string  `json:"color"`
-	Fields   []Field `json:"fields"`
+    AuthorIcon string   `json:"author_icon"`
+	AuthorLink string   `json:"author_link"`
+	AuthorName string   `json:"author_name"`
+	Color      string   `json:"color"`
+	Fallback   string   `json:"fallback"`
+	Fields     []Field  `json:"fields"`
 	MrkdwnIn   []string `json:"mrkdwn_in"`
+	Text       string   `json:"text"`
+	ThumbUrl   string   `json:"thumb_url"`
 }
 
 type Config struct {
