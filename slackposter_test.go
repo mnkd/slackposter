@@ -83,6 +83,7 @@ func TestPostPayload(t *testing.T) {
 	payload.Username = "GitHub Status"
 	payload.IconEmoji = slk.IconEmoji
 	payload.LinkNames = true
+	payload.Mrkdwn = true
 
 	statusField := slack.Field{
 		Title: "Status",
@@ -99,9 +100,10 @@ func TestPostPayload(t *testing.T) {
 
 	attachment := slack.Attachment{
 		Fallback: "GitHub Status: Good - https://status.github.com",
-		Text:     "<https://status.github.com/|GitHub Status> : Good",
+		Text:     "<https://status.github.com/|GitHub Status> : *Good*",
 		Color:    "good",
 		Fields:   []slack.Field{statusField, dateField},
+		MrkdwnIn: []string{"text"},
 	}
 
 	payload.Attachments = []slack.Attachment{attachment}

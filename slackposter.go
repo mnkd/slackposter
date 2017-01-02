@@ -24,6 +24,7 @@ type Payload struct {
 	IconEmoji   string       `json:"icon_emoji"`
 	LinkNames   bool         `json:"link_names"`
 	Attachments []Attachment `json:"attachments"`
+	Mrkdwn      bool         `json:"mrkdwn"`
 }
 
 type Field struct {
@@ -37,6 +38,7 @@ type Attachment struct {
 	Text     string  `json:"text"`
 	Color    string  `json:"color"`
 	Fields   []Field `json:"fields"`
+	MrkdwnIn   []string `json:"mrkdwn_in"`
 }
 
 type Config struct {
