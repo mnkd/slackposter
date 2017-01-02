@@ -7,10 +7,10 @@ import (
 )
 
 type Slack struct {
-	Channel    string
-	Username   string
+    Channel    string
 	DryRun     bool
 	IconEmoji  string
+	Username   string
 	WebhookUrl string
 }
 
@@ -19,19 +19,19 @@ type Slack struct {
 // https://api.slack.com/docs/message-attachments
 
 type Payload struct {
+    Attachments []Attachment `json:"attachments"`
 	Channel     string       `json:"channel"`
-	Username    string       `json:"username"`
-	Text        string       `json:"text"`
 	IconEmoji   string       `json:"icon_emoji"`
 	LinkNames   bool         `json:"link_names"`
-	Attachments []Attachment `json:"attachments"`
 	Mrkdwn      bool         `json:"mrkdwn"`
+	Text        string       `json:"text"`
+	Username    string       `json:"username"`
 }
 
 type Field struct {
+    Short bool   `json:"short"`
 	Title string `json:"title"`
 	Value string `json:"value"`
-	Short bool   `json:"short"`
 }
 
 type Attachment struct {
@@ -43,17 +43,17 @@ type Attachment struct {
 }
 
 type Config struct {
-	Channel    string `json:"channel"`
-	Username   string `json:"username"`
+    Channel    string `json:"channel"`
 	IconEmoji  string `json:"icon_emoji"`
+	Username   string `json:"username"`
 	WebhookUrl string `json:"webhook_url"`
 }
 
 func NewSlack(config Config) Slack {
 	slack := Slack{
 		Channel:    config.Channel,
-		Username:   config.Username,
 		IconEmoji:  config.IconEmoji,
+		Username:   config.Username,
 		WebhookUrl: config.WebhookUrl,
 	}
 	return slack
