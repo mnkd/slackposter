@@ -6,17 +6,8 @@ LDFLAGS  := -ldflags="-X \"main.Version=$(VERSION)\" -X \"main.Revision=$(REVISI
 
 # Setup
 setup:
-	go get github.com/Masterminds/glide
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/goimports
-
-# Install dependencies
-deps: setup
-	glide install
-
-# Update dependencies
-update: setup
-	glide update
 
 ## Lint
 lint: setup
@@ -43,4 +34,4 @@ help:
 clean:
 	rm -rf bin/*
 
-.PHONY: setup deps update test lint help
+.PHONY: setup update test lint help
