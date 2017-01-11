@@ -9,7 +9,7 @@ import (
 )
 
 type Slack struct {
-    Channel    string
+	Channel    string
 	DryRun     bool
 	IconEmoji  string
 	Username   string
@@ -21,7 +21,7 @@ type Slack struct {
 // https://api.slack.com/docs/message-attachments
 
 type Payload struct {
-    Attachments []Attachment `json:"attachments"`
+	Attachments []Attachment `json:"attachments"`
 	Channel     string       `json:"channel"`
 	IconEmoji   string       `json:"icon_emoji"`
 	LinkNames   bool         `json:"link_names"`
@@ -31,13 +31,13 @@ type Payload struct {
 }
 
 type Field struct {
-    Short bool   `json:"short"`
+	Short bool   `json:"short"`
 	Title string `json:"title"`
 	Value string `json:"value"`
 }
 
 type Attachment struct {
-    AuthorIcon string   `json:"author_icon"`
+	AuthorIcon string   `json:"author_icon"`
 	AuthorLink string   `json:"author_link"`
 	AuthorName string   `json:"author_name"`
 	Color      string   `json:"color"`
@@ -49,7 +49,7 @@ type Attachment struct {
 }
 
 type Config struct {
-    Channel    string `json:"channel"`
+	Channel    string `json:"channel"`
 	IconEmoji  string `json:"icon_emoji"`
 	Username   string `json:"username"`
 	WebhookUrl string `json:"webhook_url"`
