@@ -121,13 +121,5 @@ func (slack Slack) post(payload Payload) error {
 		return err
 	}
 
-	// Read Response Body
-	// responseBody, _ := ioutil.ReadAll(response.Body)
-
-	// Display Results
-	// fmt.Println("response Status : ", response.Status)
-	// fmt.Println("response Headers : ", resp.Header)
-	// fmt.Println("response Body : ", string(respBody))
-
 	return nil
 }
