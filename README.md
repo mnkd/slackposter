@@ -28,6 +28,6 @@ func main() {
 ![message](examples/message.png)
 
 You can send a customized message (payload).
-Please refer to `examples/example_payload.go`
+Please refer to [examples/example_payload.go](https://github.com/m-nakada/slackposter/blob/examples/examples/example_payload.go)
 
 ![payload](examples/payload.png)
