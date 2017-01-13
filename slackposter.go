@@ -65,6 +65,15 @@ func NewSlack(config Config) Slack {
 	return slack
 }
 
+func (slack Slack) NewPayload() Payload {
+	return Payload{
+		Channel:   slack.Channel,
+		Username:  slack.Username,
+		IconEmoji: slack.IconEmoji,
+		LinkNames: true,
+	}
+}
+
 func (payload *Payload) AppendField(field Field, attachmentIndex int) {
 	if attachmentIndex >= len(payload.Attachments) {
 		return
@@ -111,14 +120,6 @@ func (slack Slack) post(payload Payload) error {
 	if err != nil {
 		return err
 	}
-
-	// Read Response Body
-	// responseBody, _ := ioutil.ReadAll(response.Body)
-
-	// Display Results
-	// fmt.Println("response Status : ", response.Status)
-	// fmt.Println("response Headers : ", resp.Header)
-	// fmt.Println("response Body : ", string(respBody))
 
 	return nil
 }
