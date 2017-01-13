@@ -17,7 +17,7 @@ type Config struct {
 }
 
 // Note:
-// .config/slackposter/config.json
+// ~/.config/slackposter/config.json
 //
 // {
 //   "channels": [
