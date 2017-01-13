@@ -65,6 +65,15 @@ func NewSlack(config Config) Slack {
 	return slack
 }
 
+func (slack Slack) NewPayload() Payload {
+	return Payload{
+		Channel:   slack.Channel,
+		Username:  slack.Username,
+		IconEmoji: slack.IconEmoji,
+		LinkNames: true,
+	}
+}
+
 func (payload *Payload) AppendField(field Field, attachmentIndex int) {
 	if attachmentIndex >= len(payload.Attachments) {
 		return
