@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	slack "github.com/m-nakada/slackposter"
+	slack "github.com/mnkd/slackposter"
 )
 
 type Config struct {

@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/m-nakada/slackposter"
+	"github.com/mnkd/slackposter"
 )
 
 func main() {

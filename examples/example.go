@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/m-nakada/slackposter"
+	"github.com/mnkd/slackposter"
 )
 
 func main() {
