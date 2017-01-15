@@ -8,7 +8,7 @@ import (
 
 func main() {
 	config := slackposter.Config{
-		"yourchannel",
+		"#your-channel",
 		":octocat:",
 		"GitHub | Status",
 		"https://hooks.slack.com/services/xxx/xxx/xxx",

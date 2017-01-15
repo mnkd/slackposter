@@ -67,7 +67,7 @@ func NewSlack(t *testing.T) slack.Slack {
 }
 
 func TestPostMessage(t *testing.T) {
-	message := "Hello world."
+	message := "Hello, world!"
 	slk := NewSlack(t)
 	err := slk.PostMessage(message)
 	if err != nil {

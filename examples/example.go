@@ -6,12 +6,12 @@ import (
 
 func main() {
 	config := slackposter.Config{
-		"yourchannel",
-		":ghost:",
-		"Ghost",
-		"https://hooks.slack.com/services/xxxx/xxx/xxx",
+        "#your-channel",
+		":octocat:",
+		"GitHub | Status",
+		"https://hooks.slack.com/services/xxx/xxx/xxx",
 	}
 
 	slack := slackposter.NewSlack(config)
-	slack.PostMessage("Hello world!")
+	slack.PostMessage("Hello, world!")
 }
