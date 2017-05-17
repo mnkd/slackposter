@@ -43,9 +43,16 @@ type Attachment struct {
 	Color      string   `json:"color"`
 	Fallback   string   `json:"fallback"`
 	Fields     []Field  `json:"fields"`
+	FooterIcon string   `json:"footer_icon"`
+	Footer     string   `json:"footer"`
+	ImageUrl   string   `json:"image_url"`
 	MrkdwnIn   []string `json:"mrkdwn_in"`
+	Pretext    string   `json:"pretext"`
 	Text       string   `json:"text"`
 	ThumbUrl   string   `json:"thumb_url"`
+	TitleLink  string   `json:"title_link"`
+	Title      string   `json:"title"`
+	Ts         int64    `json:"ts"`
 }
 
 type Config struct {
