@@ -1,4 +1,6 @@
 # skackposter
+[![Godoc Reference](https://godoc.org/github.com/mnkd/slackposter?status.svg)](https://godoc.org/github.com/mnkd/slackposter)
+
 Post a payload to your Slack incoming webhook.
 
 ## Usage
