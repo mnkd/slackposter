@@ -1,37 +1,14 @@
-NAME     := slackposter
-VERSION  := 0.1.0
-REVISION := $(shell git rev-parse --short HEAD)
-SRCS     := slackposter.go
-LDFLAGS  := -ldflags="-X \"main.Version=$(VERSION)\" -X \"main.Revision=$(REVISION)\""
+PACKAGES = $(shell go list)
 
-# Setup
-setup:
-	go get github.com/golang/lint/golint
-	go get golang.org/x/tools/cmd/goimports
+default: test
 
-## Lint
-lint: setup
-	go vet $$(glide novendor)
-	for pkg in $$(glide novendor -x); do \
-		golint -set_exit_status $$pkg || exit $$?;\
-	done
+test:
+	go test ${PACKAGES}
 
-## Format source codes
-fmt: setup
-	goimports -w $$(glide nv -x)
+vet:
+	go vet ${PACKAGES}
 
-# Build binaries ex. make bin/myproj
-# bin/%: cmd/%/main.go deps
-# 	go build -ldflags "$(LDFLAGS)" -o $@ $<
+lint:
+	golint ${PACKAGES}
 
-bin/$(NAME): $(SRCS) fmt
-	go build $(LDFLAGS) -o bin/$(NAME)
-
-# Show help
-help:
-	@make2help $(MAKEFILE_LIST)
-
-clean:
-	rm -rf bin/*
-
-.PHONY: setup update test lint help
+.PHONY: test vet lint

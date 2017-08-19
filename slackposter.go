@@ -8,18 +8,22 @@ import (
 	"os"
 )
 
-type Slack struct {
+// SlackPoster represents a poster for Slack incoming webhook.
+// SlackPoster must be created by calling NewSlackPoster().
+type SlackPoster struct {
 	Channel    string
 	DryRun     bool
 	IconEmoji  string
 	Username   string
-	WebhookUrl string
+	WebhookURL string
 }
 
+// Payload is represented a Slack messsage format.
+//
 // Refer to:
 // Attaching content and links to messages | Slack
 // https://api.slack.com/docs/message-attachments
-
+//
 type Payload struct {
 	Attachments []Attachment `json:"attachments"`
 	Channel     string       `json:"channel"`
@@ -30,12 +34,14 @@ type Payload struct {
 	Username    string       `json:"username"`
 }
 
+// Field represents a `field`.
 type Field struct {
 	Short bool   `json:"short"`
 	Title string `json:"title"`
 	Value string `json:"value"`
 }
 
+// Attachment represents a `attachment`.
 type Attachment struct {
 	AuthorIcon string   `json:"author_icon"`
 	AuthorLink string   `json:"author_link"`
@@ -45,42 +51,45 @@ type Attachment struct {
 	Fields     []Field  `json:"fields"`
 	FooterIcon string   `json:"footer_icon"`
 	Footer     string   `json:"footer"`
-	ImageUrl   string   `json:"image_url"`
+	ImageURL   string   `json:"image_url"`
 	MrkdwnIn   []string `json:"mrkdwn_in"`
 	Pretext    string   `json:"pretext"`
 	Text       string   `json:"text"`
-	ThumbUrl   string   `json:"thumb_url"`
+	ThumbURL   string   `json:"thumb_url"`
 	TitleLink  string   `json:"title_link"`
 	Title      string   `json:"title"`
 	Ts         int64    `json:"ts"`
 }
 
+// Config is the configuration of SlackPoster.
 type Config struct {
 	Channel    string `json:"channel"`
 	IconEmoji  string `json:"icon_emoji"`
 	Username   string `json:"username"`
-	WebhookUrl string `json:"webhook_url"`
+	WebhookURL string `json:"webhook_url"`
 }
 
-func NewSlack(config Config) Slack {
-	slack := Slack{
-		Channel:    config.Channel,
-		IconEmoji:  config.IconEmoji,
-		Username:   config.Username,
-		WebhookUrl: config.WebhookUrl,
+// NewSlackPoster create a new SlackPoster given a Config.
+func NewSlackPoster(c Config) SlackPoster {
+	return SlackPoster{
+		Channel:    c.Channel,
+		IconEmoji:  c.IconEmoji,
+		Username:   c.Username,
+		WebhookURL: c.WebhookURL,
 	}
-	return slack
 }
 
-func (slack Slack) NewPayload() Payload {
+// NewPayload create a new Payload.
+func (sp SlackPoster) NewPayload() Payload {
 	return Payload{
-		Channel:   slack.Channel,
-		Username:  slack.Username,
-		IconEmoji: slack.IconEmoji,
+		Channel:   sp.Channel,
+		Username:  sp.Username,
+		IconEmoji: sp.IconEmoji,
 		LinkNames: true,
 	}
 }
 
+// AppendField append a Field to Attachments.
 func (payload *Payload) AppendField(field Field, attachmentIndex int) {
 	if attachmentIndex >= len(payload.Attachments) {
 		return
@@ -88,34 +97,36 @@ func (payload *Payload) AppendField(field Field, attachmentIndex int) {
 	payload.Attachments[attachmentIndex].Fields = append(payload.Attachments[attachmentIndex].Fields, field)
 }
 
-func (slack Slack) PostPayload(payload Payload) error {
-	return slack.post(payload)
+// PostPayload posts a payload to WebhookURL.
+func (sp SlackPoster) PostPayload(payload Payload) error {
+	return sp.post(payload)
 }
 
-func (slack Slack) PostMessage(message string) error {
+// PostMessage posts a message to WebhookURL.
+func (sp SlackPoster) PostMessage(message string) error {
 	var payload Payload
-	payload.Channel = slack.Channel
-	payload.Username = slack.Username
-	payload.IconEmoji = slack.IconEmoji
+	payload.Channel = sp.Channel
+	payload.Username = sp.Username
+	payload.IconEmoji = sp.IconEmoji
 	payload.LinkNames = true
 	payload.Text = message
-	return slack.post(payload)
+	return sp.post(payload)
 }
 
-func (slack Slack) post(payload Payload) error {
+func (sp SlackPoster) post(payload Payload) error {
 	data, err := json.Marshal(payload)
 	if err != nil {
 		return err
 	}
 
-	if slack.DryRun {
+	if sp.DryRun {
 		fmt.Fprintln(os.Stdout, "**dry run**\njson:\n", string(data))
 		return nil
 	}
 
 	// Create request
 	body := bytes.NewBuffer(data)
-	request, err := http.NewRequest("POST", slack.WebhookUrl, body)
+	request, err := http.NewRequest("POST", sp.WebhookURL, body)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	if err != nil {
 		return err
