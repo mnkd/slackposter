@@ -8,19 +8,17 @@ import (
 	"path/filepath"
 	"testing"
 	"time"
-
-	slack "github.com/mnkd/slackposter"
 )
 
-type Config struct {
-	Channels []slack.Config `json:"channels"`
+type TestingConfig struct {
+	Webhooks []Config `json:"slack_webhooks"`
 }
 
 // Note:
 // ~/.config/slackposter/config.json
 //
 // {
-//   "channels": [
+//   "slack_webhooks": [
 //     {
 //       "channel": "#general",
 //       "username": "GitHub Status",
@@ -30,46 +28,46 @@ type Config struct {
 //     ..snip..
 // }
 
-func NewConfig() (Config, error) {
-	var config Config
+func LoadConfig() (TestingConfig, error) {
+	var config TestingConfig
 
 	usr, err := user.Current()
 	if err != nil {
 		fmt.Println("Could not get current user.", err)
-		return config, err
+		return TestingConfig{}, err
 	}
+
 	path := filepath.Join(usr.HomeDir, "/.config/slackposter/config.json")
 
 	str, err := ioutil.ReadFile(path)
 	if err != nil {
 		fmt.Println("Could not read config.json. ", err)
-		return config, err
+		return TestingConfig{}, err
 	}
 
 	if err := json.Unmarshal(str, &config); err != nil {
-		fmt.Println("JSON Unmarshal Error:", err)
+		fmt.Println("Failed to unmarshal config.json:", err)
 		return config, err
 	}
 
 	return config, nil
 }
 
-func NewSlack(t *testing.T) slack.Slack {
-	config, err := NewConfig()
+func PrepareSlackPoster(t *testing.T) SlackPoster {
+	config, err := LoadConfig()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(config.Channels) == 0 {
+	if len(config.Webhooks) == 0 {
 		t.Fatal("len(config.channels) == 0")
 	}
-	slackposter := slack.NewSlack(config.Channels[0])
-	return slackposter
+	return NewSlackPoster(config.Webhooks[0])
 }
 
 func TestPostMessage(t *testing.T) {
 	message := "Hello, world!"
-	slk := NewSlack(t)
-	err := slk.PostMessage(message)
+	poster := PrepareSlackPoster(t)
+	err := poster.PostMessage(message)
 	if err != nil {
 		t.Error(err)
 	}
@@ -77,48 +75,48 @@ func TestPostMessage(t *testing.T) {
 
 func TestPostMessageDryRun(t *testing.T) {
 	message := "Hello world. (dry run)"
-	slk := NewSlack(t)
-	slk.DryRun = true
-	err := slk.PostMessage(message)
+	poster := PrepareSlackPoster(t)
+	poster.DryRun = true
+	err := poster.PostMessage(message)
 	if err != nil {
 		t.Error(err)
 	}
 }
 
 func TestPostPayload(t *testing.T) {
-	slk := NewSlack(t)
+	poster := PrepareSlackPoster(t)
 
-	var payload slack.Payload
-	payload.Channel = slk.Channel
+	var payload Payload
+	payload.Channel = poster.Channel
 	payload.Username = "GitHub Status"
-	payload.IconEmoji = slk.IconEmoji
+	payload.IconEmoji = poster.IconEmoji
 	payload.LinkNames = true
 	payload.Mrkdwn = true
 
-	statusField := slack.Field{
+	statusField := Field{
 		Title: "Status",
 		Value: "Good",
 		Short: true,
 	}
 
 	dateString := time.Now().Format("2006-01-02 15:04")
-	dateField := slack.Field{
+	dateField := Field{
 		Title: "Date",
 		Value: dateString,
 		Short: true,
 	}
 
-	attachment := slack.Attachment{
+	attachment := Attachment{
 		Fallback: "GitHub Status: Good - https://status.github.com",
 		Text:     "<https://status.github.com/|GitHub Status> : *Good*",
 		Color:    "good",
-		Fields:   []slack.Field{statusField, dateField},
+		Fields:   []Field{statusField, dateField},
 		MrkdwnIn: []string{"text"},
 	}
 
-	payload.Attachments = []slack.Attachment{attachment}
+	payload.Attachments = []Attachment{attachment}
 
-	err := slk.PostPayload(payload)
+	err := poster.PostPayload(payload)
 	if err != nil {
 		t.Error(err)
 	}
