@@ -10,10 +10,8 @@ import (
 	"time"
 )
 
-type TestingConfig struct {
-	Webhooks []Config `json:"slack_webhooks"`
-}
-
+// TestingConfig is the configuration for slackposter_test.
+//
 // Note:
 // ~/.config/slackposter/config.json
 //
@@ -27,8 +25,13 @@ type TestingConfig struct {
 //     },
 //     ..snip..
 // }
+//
+type TestingConfig struct {
+	Webhooks []Config `json:"slack_webhooks"`
+}
 
-func LoadConfig() (TestingConfig, error) {
+// loadConfig setup a TestingConfig.
+func loadConfig() (TestingConfig, error) {
 	var config TestingConfig
 
 	usr, err := user.Current()
@@ -53,8 +56,9 @@ func LoadConfig() (TestingConfig, error) {
 	return config, nil
 }
 
-func PrepareSlackPoster(t *testing.T) SlackPoster {
-	config, err := LoadConfig()
+// prepareSlackPoster prepares a SlackPoster instance.
+func prepareSlackPoster(t *testing.T) SlackPoster {
+	config, err := loadConfig()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,7 +70,7 @@ func PrepareSlackPoster(t *testing.T) SlackPoster {
 
 func TestPostMessage(t *testing.T) {
 	message := "Hello, world!"
-	poster := PrepareSlackPoster(t)
+	poster := prepareSlackPoster(t)
 	err := poster.PostMessage(message)
 	if err != nil {
 		t.Error(err)
@@ -75,7 +79,7 @@ func TestPostMessage(t *testing.T) {
 
 func TestPostMessageDryRun(t *testing.T) {
 	message := "Hello world. (dry run)"
-	poster := PrepareSlackPoster(t)
+	poster := prepareSlackPoster(t)
 	poster.DryRun = true
 	err := poster.PostMessage(message)
 	if err != nil {
@@ -84,7 +88,7 @@ func TestPostMessageDryRun(t *testing.T) {
 }
 
 func TestPostPayload(t *testing.T) {
-	poster := PrepareSlackPoster(t)
+	poster := prepareSlackPoster(t)
 
 	var payload Payload
 	payload.Channel = poster.Channel
