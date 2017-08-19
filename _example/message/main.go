@@ -9,7 +9,7 @@ func main() {
 		Channel:    "#your-channel",
 		IconEmoji:  ":octocat:",
 		Username:   "Octocat",
-		WebhookUrl: "https://hooks.slack.com/services/xxx/xxx/xxx",
+		WebhookURL: "https://hooks.slack.com/services/xxx/xxx/xxx",
 	}
 	poster := slack.NewSlackPoster(config)
 	poster.PostMessage("Hello, world!")

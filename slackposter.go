@@ -13,7 +13,7 @@ type SlackPoster struct {
 	DryRun     bool
 	IconEmoji  string
 	Username   string
-	WebhookUrl string
+	WebhookURL string
 }
 
 // Refer to:
@@ -59,7 +59,7 @@ type Config struct {
 	Channel    string `json:"channel"`
 	IconEmoji  string `json:"icon_emoji"`
 	Username   string `json:"username"`
-	WebhookUrl string `json:"webhook_url"`
+	WebhookURL string `json:"webhook_url"`
 }
 
 func NewSlackPoster(c Config) SlackPoster {
@@ -67,7 +67,7 @@ func NewSlackPoster(c Config) SlackPoster {
 		Channel:    c.Channel,
 		IconEmoji:  c.IconEmoji,
 		Username:   c.Username,
-		WebhookUrl: c.WebhookUrl,
+		WebhookURL: c.WebhookURL,
 	}
 }
 
@@ -114,7 +114,7 @@ func (sp SlackPoster) post(payload Payload) error {
 
 	// Create request
 	body := bytes.NewBuffer(data)
-	request, err := http.NewRequest("POST", sp.WebhookUrl, body)
+	request, err := http.NewRequest("POST", sp.WebhookURL, body)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	if err != nil {
 		return err
